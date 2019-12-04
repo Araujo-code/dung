@@ -93,7 +93,7 @@ class Weapon {
     this.img.src = weapon3;
   }
   draw() {
-    this.x++;
+    this.x += 4;
     ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
   }
 }
@@ -102,11 +102,11 @@ class Enemy {
   constructor() {
     this.width = 80;
     this.height = 110;
-    this.hp = 50;
+    this.hp = 250;
     this.x = canvas.width - this.width;
     this.y = canvas.height - this.height - 40;
     this.img = new Image();
-    this.img.src = enemy3;
+    this.img.src = enemy1;
     this.img.onload = () => {
       this.draw();
     };
@@ -133,7 +133,7 @@ class Minion {
     this.x = x;
     this.y = y;
     this.img = new Image();
-    this.img.src = minion3;
+    this.img.src = minion1;
     this.img.onload = () => {
       this.draw();
     };
@@ -174,14 +174,17 @@ function gameOver() {
 
 function win() {
   clearInterval(interval);
+  ctx.font = "40px Arial";
+  ctx.fillStyle = "white";
+  ctx.fillText("Ganaste", canvas.width / 2 - 30, 100);
   console.log("win");
 }
 // Crear minions
 function generateMinions() {
   if (frames % 100 === 0) {
-    const max = canvas.height;
+    const max = canvas.height - 40;
     const min = canvas.height / 2;
-    const randomHeight = Math.floor(Math.random() * max - 40) + min + 40;
+    const randomHeight = Math.floor(Math.random() * max) + min;
     const minion = new Minion(enemy.x, randomHeight);
     minions.push(minion);
   }
@@ -212,7 +215,7 @@ function checkCollition() {
 }
 
 function drawLife() {
-  ctx.fillRect(0, 0, (canvas.width * enemy.hp) / 50, 20);
+  ctx.fillRect(0, 0, (canvas.width * enemy.hp) / 250, 20);
 }
 
 start();
@@ -222,11 +225,10 @@ addEventListener("keypress", function(e) {
     player.moveUp();
   } else if (e.keyCode === 115) {
     player.moveDown();
-  } else if (e.keyCode === 97) {
-    player.moveLeft();
-  } else if (e.keyCode === 100) {
-    player.moveRight();
-  } else if (e.keyCode === 32) {
+  }
+});
+addEventListener("keyup", function(e) {
+  if (e.keyCode === 32) {
     player.shoot();
   }
 });
